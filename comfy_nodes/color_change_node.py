@@ -1,6 +1,3 @@
-import numpy as np
-
-
 class ColorChangeNode:
     """ComfyUI node to change the color of a masked region."""
 
@@ -21,8 +18,8 @@ class ColorChangeNode:
     CATEGORY = "Color"
 
     def run(self, image, mask, red=1.0, green=0.0, blue=0.0):
-        color = np.array([red, green, blue], dtype=image.dtype)
-        result = image.copy()
+        color = image.new_tensor([red, green, blue])
+        result = image.clone()
         if mask.ndim == 2:
             mask = mask[..., None]
         result[mask > 0.5] = color
