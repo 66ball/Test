@@ -6,13 +6,14 @@ except Exception:  # pragma: no cover - torch optional
 
 
 class ColorChangeNode:
-    """ComfyUI node to recolor an image to a selected palette color."""
+    """ComfyUI node to recolor masked regions to a selected palette color."""
 
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
                 "image": ("IMAGE",),
+                "mask": ("MASK",),
                 "color": (
                     "STRING",
                     {
@@ -36,7 +37,7 @@ class ColorChangeNode:
     FUNCTION = "run"
     CATEGORY = "Color"
 
-    def run(self, image, color="red"):
+    def run(self, image, mask, color="red"):
         palette = {
             "red": [1.0, 0.0, 0.0],
             "green": [0.0, 1.0, 0.0],
@@ -49,16 +50,19 @@ class ColorChangeNode:
         }
         rgb = palette.get(color, palette["red"])
 
+        if mask.ndim == 2:
+            mask = mask[..., None]
+        mask_bool = mask != 0
+
         if torch is not None and isinstance(image, torch.Tensor):
             color_t = image.new_tensor(rgb)
             result = image.clone()
-            result[...] = color_t
+            result[mask_bool] = color_t
         else:
             result = np.array(image, copy=True)
-            result[...] = np.array(rgb, dtype=np.float32)
+            result[mask_bool] = np.array(rgb, dtype=result.dtype)
         return (result,)
 
 
 NODE_CLASS_MAPPINGS = {"ColorChangeNode": ColorChangeNode}
 NODE_DISPLAY_NAME_MAPPINGS = {"ColorChangeNode": "Color Change Node"}
-
