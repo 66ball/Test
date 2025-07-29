@@ -6,7 +6,11 @@ except Exception:  # pragma: no cover - torch optional
 
 
 class ColorChangeNode:
-    """ComfyUI node to recolor masked regions to a selected palette color."""
+    """ComfyUI node to recolor an image using a palette.
+
+    The node applies the chosen color only on pixels where the mask is
+    non-zero, leaving the rest of the image unchanged.
+    """
 
     @classmethod
     def INPUT_TYPES(cls):
