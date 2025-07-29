@@ -2,13 +2,12 @@
 
 ## ColorChangeNode
 
-`ColorChangeNode` recolors pixels in an input image wherever the provided mask is non-zero.
+`ColorChangeNode` recolors an entire image using a color from a small palette.
 
 ### Parameters
 
 - `image` (`IMAGE`): Input image tensor.
-- `mask` (`MASK`): Mask tensor. Pixels with values other than zero will be recolored.
-- `red`, `green`, `blue` (`FLOAT`): Components of the color to apply.
+- `color` (`STRING`): Name of the color to apply. One of `red`, `green`, `blue`, `yellow`, `cyan`, `magenta`, `white`, or `black`.
 
 ### Example
 
@@ -18,6 +17,5 @@ import numpy as np
 
 node = ColorChangeNode()
 image = np.zeros((2, 2, 3), dtype=np.float32)
-mask = np.array([[1, 0], [0, 0]], dtype=np.float32)
-colored, = node.run(image, mask, red=1.0, green=0.0, blue=0.0)
+colored, = node.run(image, color="green")
 ```
