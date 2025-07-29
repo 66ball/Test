@@ -25,7 +25,8 @@ class ColorChangeNode:
         result = image.copy()
         if mask.ndim == 2:
             mask = mask[..., None]
-        result[mask > 0.5] = color
+        mask_bool = mask != 0
+        result[mask_bool] = color
         return (result,)
 
 
