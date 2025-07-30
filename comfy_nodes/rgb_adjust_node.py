@@ -27,7 +27,7 @@ class RGBAdjustContrastFeatherNode:
     FUNCTION = "run"
     CATEGORY = "Color"
 
-    def _box_blur_numpy(self, image, radius):
+    def _box_blur(self, image, radius):
         if radius <= 0:
             return image
         k = 2 * radius + 1
@@ -64,7 +64,7 @@ class RGBAdjustContrastFeatherNode:
             result = arr * color
             result = (result - 0.5) * contrast + 0.5
             result = np.clip(result, 0.0, 1.0)
-            result = self._box_blur_numpy(result, int(feather))
+            result = self._box_blur(result, int(feather))
             return (result,)
 
 
