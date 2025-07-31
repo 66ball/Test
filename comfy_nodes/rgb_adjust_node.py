@@ -59,7 +59,10 @@ class RGBAdjustContrastFeatherNode:
             result = self._box_blur_torch(result, int(feather))
             return (result,)
         else:
-            arr = np.asarray(image)
+            if not isinstance(image, np.ndarray) and hasattr(image, "detach"):
+                arr = image.detach().cpu().numpy()
+            else:
+                arr = np.asarray(image)
             color = np.array([red, green, blue], dtype=arr.dtype)
             result = arr * color
             result = (result - 0.5) * contrast + 0.5
