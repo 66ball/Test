@@ -3,6 +3,8 @@
 ## ColorChangeNode
 
 `ColorChangeNode` fills the entire input image with the specified color.
+It accepts either a NumPy array or a PyTorch tensor as input and will
+internally convert tensors to NumPy arrays if necessary.
 
 ### Parameters
 
@@ -24,7 +26,8 @@ colored, = node.run(image, red=1.0, green=0.0, blue=0.0)
 
 `RGBAdjustContrastFeatherNode` scales each color channel of the input image,
 adjusts overall contrast, and optionally applies a feathering blur. The node
-supports both NumPy arrays and PyTorch tensors as input images.
+supports both NumPy arrays and PyTorch tensors as input images and will safely
+convert tensors to NumPy arrays when PyTorch is unavailable.
 
 ### Parameters
 

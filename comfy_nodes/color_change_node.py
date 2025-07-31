@@ -20,8 +20,15 @@ class ColorChangeNode:
     CATEGORY = "Color"
 
     def run(self, image, red=1.0, green=0.0, blue=0.0):
-        color = np.array([red, green, blue], dtype=image.dtype)
-        result = np.zeros_like(image)
+        if not isinstance(image, np.ndarray) and hasattr(image, "detach"):
+            arr = image.detach().cpu().numpy()
+        else:
+            arr = np.asarray(image)
+
+        dtype = arr.dtype if isinstance(arr.dtype, np.dtype) else np.float32
+        color = np.array([red, green, blue], dtype=dtype)
+
+        result = np.zeros_like(arr)
         result[...] = color
         return (result,)
 

@@ -63,7 +63,8 @@ class RGBAdjustContrastFeatherNode:
                 arr = image.detach().cpu().numpy()
             else:
                 arr = np.asarray(image)
-            color = np.array([red, green, blue], dtype=arr.dtype)
+            dtype = arr.dtype if isinstance(arr.dtype, np.dtype) else np.float32
+            color = np.array([red, green, blue], dtype=dtype)
             result = arr * color
             result = (result - 0.5) * contrast + 0.5
             result = np.clip(result, 0.0, 1.0)
